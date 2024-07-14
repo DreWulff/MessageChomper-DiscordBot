@@ -3,7 +3,7 @@
 A Discord bot written in Python made only to eat a channel's messages one by one.  
 Commands are explained in the **Commands** section.
 
-**Be careful when setting up the bot's permissions and channels as it will delete ALL messages one by one, or until stopped.**
+**Be careful when setting up the bot's permissions and channels as it will delete ALL messages one by one, or until stopped with the /shut command.**
 
 ## Setup
 Clone this repository with the following command:
