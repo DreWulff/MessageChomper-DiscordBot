@@ -38,7 +38,7 @@ async def chomp(interaction: discord.Interaction, rate: int = 1):
     rate = 3 if rate > 3 else rate
     rate = 1 if rate < 1 else rate
     async for guild in BOT.fetch_guilds(limit=None):
-        channel = [channel for channel in await guild.fetch_channels() if channel.name == "cave-of-whimsy"][0]
+        channel = [channel for channel in await guild.fetch_channels() if channel.name == interaction.channel.name][0]
         try:
             await interaction.response.send_message("**OM NOM NOM NOM NOM!**")
             CHOMPING=True
