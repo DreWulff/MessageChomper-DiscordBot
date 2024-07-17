@@ -45,8 +45,6 @@ async def chomp(interaction: discord.Interaction, rate: int = 1):
             async for message in channel.history(limit=None, oldest_first=False):
                 if (not CHOMPING): break
                 if ((datetime.utcnow().replace(tzinfo=None) - message.created_at.replace(tzinfo=None) > timedelta(minutes=1)) or (message.author != BOT.user)):
-                # Check if the message is older than 24 hours
-                #if now - message.created_at > timedelta(hours=1):
                     print("Chomped! -> " + message.content)
                     await message.delete()
                     await asyncio.sleep(1.0/rate)  # Avoid rate limits
