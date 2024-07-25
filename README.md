@@ -3,7 +3,7 @@
 A Discord bot written in Python made to eat a channel's messages one by one.  
 Commands are explained in the [Commands](#discord--commands) section.
 
-**Be careful when setting up the bot's permissions and channels as it will attempt to delete ALL messages one by one, unless stopped with the /shut command.**
+**Be careful when setting up the bot's permissions and channels as it will attempt to delete ALL non-pinned messages one by one, unless stopped with the /shut command.**
 
 ## Setup
 Clone this repository with the following command:
@@ -32,6 +32,7 @@ python bot.py
 * `/chomp [rate=1]`:
   * Starts deleting messages from newest to oldest at desired rate.
   * Rate of deleted messages will stay in the range between 1 and 3 messages per second.
+  * Ignores pinned messages.
 
 * `/shut`:
   * Stops the deletion of messages.
