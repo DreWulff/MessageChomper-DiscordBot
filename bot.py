@@ -1,8 +1,6 @@
-# bot.py
 # Python libraries
 import os
 import asyncio
-from datetime import datetime, timedelta, timezone
 
 # External libraries
 from dotenv import load_dotenv
@@ -34,25 +32,26 @@ async def on_ready():
 async def chomp(interaction: discord.Interaction, rate: int = 1):
     global CHOMPING
     print("Chomping...")
-    now = datetime.now()
-    rate = 3 if rate > 3 else rate
-    rate = 1 if rate < 1 else rate
-    async for guild in BOT.fetch_guilds(limit=None):
-        channel = [channel for channel in await guild.fetch_channels() if channel.name == interaction.channel.name][0]
-        try:
-            await interaction.response.send_message("**OM NOM NOM NOM NOM!**")
-            CHOMPING=True
-            async for message in channel.history(limit=None, oldest_first=False):
-                if (not CHOMPING): break
-                if (((datetime.utcnow().replace(tzinfo=None) - message.created_at.replace(tzinfo=None) > timedelta(minutes=1)) or (message.author != BOT.user)) and (not message.pinned)):
-                    print("Chomped! -> " + message.content)
-                    await message.delete()
-                    await asyncio.sleep(1.0/rate)  # Avoid rate limits
-        except discord.Forbidden:
-            print(f"Permission error in channel {channel.name}")
-        except discord.HTTPException as e:
-            print(f"HTTP error in channel {channel.name}: {e}")
-        CHOMPING=False
+    rate = max(min(rate, 3), 1)
+    if (CHOMPING):
+        await interaction.response.send_message("**OM NOMING ALREADY**", ephemeral=True)
+    else:
+        async for guild in BOT.fetch_guilds(limit=None):
+            channel = [channel for channel in await guild.fetch_channels() if channel.name == interaction.channel.name][0]
+            try:
+                await interaction.response.send_message("**OM NOM NOM NOM NOM!**", ephemeral=True)
+                CHOMPING=True
+                async for message in channel.history(limit=None, oldest_first=False):
+                    if (not CHOMPING): break
+                    if (not message.pinned):
+                        print("Chomped! -> " + message.content)
+                        await message.delete()
+                        await asyncio.sleep(1.0/rate)  # Avoid rate limits
+            except discord.Forbidden:
+                print(f"Permission error in channel {channel.name}")
+            except discord.HTTPException as e:
+                print(f"HTTP error in channel {channel.name}: {e}")
+            CHOMPING=False
 
 @BOT.tree.command(name="shut", description="Stops the CHOMP.")
 async def shut(interaction: discord.Interaction):
