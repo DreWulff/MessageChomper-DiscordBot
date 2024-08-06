@@ -27,31 +27,27 @@ async def on_ready():
     except Exception as exception:
         print(exception)
 
-@app_commands.describe(rate="Chomping rate [chomps/s]. Min: 1; Max: 3")
-@BOT.tree.command(name="chomp", description="Chomps messages at desired rate [chomps/s].")
-async def chomp(interaction: discord.Interaction, rate: int = 1):
+@BOT.tree.command(name="chomp", description="Chomps messages at 1[message/s].")
+async def chomp(interaction: discord.Interaction):
     global CHOMPING
-    print("Chomping...")
-    rate = max(min(rate, 3), 1)
     if (CHOMPING):
         await interaction.response.send_message("**OM NOMING ALREADY**", ephemeral=True)
     else:
-        async for guild in BOT.fetch_guilds(limit=None):
-            channel = [channel for channel in await guild.fetch_channels() if channel.name == interaction.channel.name][0]
-            try:
-                await interaction.response.send_message("**OM NOM NOM NOM NOM!**", ephemeral=True)
-                CHOMPING=True
-                async for message in channel.history(limit=None, oldest_first=False):
-                    if (not CHOMPING): break
-                    if (not message.pinned):
-                        print("Chomped! -> " + message.content)
-                        await message.delete()
-                        await asyncio.sleep(1.0/rate)  # Avoid rate limits
-            except discord.Forbidden:
-                print(f"Permission error in channel {channel.name}")
-            except discord.HTTPException as e:
-                print(f"HTTP error in channel {channel.name}: {e}")
-            CHOMPING=False
+        channel = interaction.channel
+        try:
+            await interaction.response.send_message("**OM NOM NOM NOM NOM!**", ephemeral=True)
+            CHOMPING=True
+            async for message in channel.history(limit=None, oldest_first=False):
+                if (not CHOMPING): break
+                if (not message.pinned):
+                    print("Chomped! -> " + message.content)
+                    await message.delete()
+                    await asyncio.sleep(1.0)
+        except discord.Forbidden:
+            print(f"Permission error in channel {channel.name}")
+        except discord.HTTPException as e:
+            print(f"HTTP error in channel {channel.name}: {e}")
+        CHOMPING=False
 
 @BOT.tree.command(name="shut", description="Stops the CHOMP.")
 async def shut(interaction: discord.Interaction):
