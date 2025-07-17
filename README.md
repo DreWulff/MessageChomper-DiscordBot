@@ -12,6 +12,9 @@ git clone https://github.com/DreWulff/MessageChomper-DiscordBot
 ```
 
 Make sure all libraries/modules required are installed.
+For this either run the bash file `install_modules.bash`, or run the following commands:
+
+    pip install python-dotenv discord.py
 
 Create a `.env` file with the next lines, replacing the values in brackets:
 ```
